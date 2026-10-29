@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en" data-canvas-width="1440" data-canvas-height="900">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STARMINER — Home Bitcoin Miners from Shenzhen</title>
+<meta name="description" content="Starminer builds quiet, low-power home Bitcoin miners. Bitaxe Gamma 601 and NerdQaxe++ — open-source firmware, Wi-Fi control, shipped worldwide from Shenzhen.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2317231D'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%23B98A3D' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23B98A3D'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="preconnect" href="https://miaoda.feishu.cn" crossorigin>
+<link href="https://miaoda.feishu.cn/fonts/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ tokens ============ */
+:root{
+  --ink:#17231D;
+  --pine:#27402F;
+  --paper:#F6F1E7;
+  --card:#FCFAF5;
+  --accent:#B98A3D;
+  --accent-deep:#8F6A2C;
+  --line:#E4DCCA;
+  --muted:#66705F;
+  --white:#FFFFFF;
+  --danger:#A44A3F;
+  --radius:14px;
+  --shadow:0 12px 32px rgba(23,35,29,.10);
+  --font-d:'Bricolage Grotesque',Georgia,serif;
+  --font-b:'Manrope','Segoe UI',sans-serif;
+  --maxw:1180px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-b);color:var(--ink);background:var(--paper);line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input{font-family:inherit}
+h1,h2,h3{font-family:var(--font-d);line-height:1.15;letter-spacing:-.01em}
+.container{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+.section{padding:56px 0}
+.section-title{font-size:clamp(26px,4.5vw,38px);font-weight:700;margin-bottom:8px}
+.section-sub{color:var(--muted);max-width:56ch;margin-bottom:28px}
+.eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.04em;color:var(--accent-deep);text-transform:none;margin-bottom:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:15px;padding:13px 22px;border-radius:999px;transition:transform .15s ease,background .15s ease,box-shadow .15s ease;min-height:46px}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--accent);color:var(--white)}
+.btn-primary:hover{background:var(--accent-deep);box-shadow:0 8px 20px rgba(185,138,61,.35)}
+.btn-dark{background:var(--ink);color:var(--paper)}
+.btn-dark:hover{background:var(--pine)}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--paper)}
+.btn-light{background:var(--paper);color:var(--ink)}
+.btn-light:hover{background:var(--white)}
+/* ============ nav ============ */
+.nav{position:sticky;top:0;z-index:50;background:rgba(246,241,231,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:62px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-d);font-weight:800;font-size:19px;letter-spacing:.01em}
+.brand-mark{width:30px;height:30px;flex:none}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{display:flex;align-items:center;gap:6px;padding:9px 12px;border-radius:999px;font-weight:600;font-size:14.5px}
+.nav-links a:hover{background:rgba(23,35,29,.06)}
+.nav-links a.active{background:var(--ink);color:var(--paper)}
+.cart-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:var(--accent);color:var(--white);font-size:12px;font-weight:700}
+.cart-badge:empty,.cart-badge.zero{display:none}
+/* ============ hero ============ */
+.hero{position:relative;display:flex;align-items:center;overflow:hidden;background:var(--ink)}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(900px 440px at 84% 38%,rgba(185,138,61,.30),transparent 62%),radial-gradient(760px 520px at 8% 92%,rgba(39,64,47,.85),transparent 68%);pointer-events:none}
+.hero-flex{position:relative;z-index:2;display:grid;grid-template-columns:1fr;gap:30px;align-items:center;padding:64px 0}
+.hero-content{max-width:560px;color:var(--paper)}
+.hero-card{background:var(--card);border-radius:20px;padding:18px;box-shadow:0 26px 64px rgba(0,0,0,.38)}
+.hero-card img{width:100%;height:auto;border-radius:12px;display:block}
+.hero-card-cap{display:flex;flex-direction:column;gap:2px;padding:13px 4px 3px}
+.hero-card-cap b{font-family:var(--font-d);font-size:17.5px;color:var(--ink)}
+.hero-card-cap span{font-size:13px;color:var(--muted)}
+@media (min-width:900px){.hero-flex{grid-template-columns:1.05fr .92fr;gap:52px;padding:88px 0}}
+.hero-content .eyebrow{color:#D8B98A}
+.hero h1{font-size:clamp(34px,6.4vw,58px);font-weight:800;margin-bottom:16px;color:var(--white)}
+.hero p{font-size:clamp(16px,2vw,18.5px);color:#E9E2D2;max-width:46ch;margin-bottom:28px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px}
+/* ============ trust bar ============ */
+.trust{border-bottom:1px solid var(--line);background:var(--card)}
+.trust-inner{display:grid;grid-template-columns:1fr;gap:18px;padding:26px 0}
+.trust-item{display:flex;gap:14px;align-items:flex-start}
+.trust-item svg{width:26px;height:26px;flex:none;color:var(--accent-deep);margin-top:2px}
+.trust-item h3{font-size:15.5px;font-weight:700;margin-bottom:2px}
+.trust-item p{font-size:13.5px;color:var(--muted)}
+/* ============ product grid ============ */
+.grid{display:grid;grid-template-columns:repeat(1,1fr);gap:18px}
+.product-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .18s ease,box-shadow .18s ease}
+.product-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.product-media{position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--paper)}
+.product-media img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+.product-card:hover .product-media img{transform:scale(1.035)}
+.product-badge{position:absolute;top:12px;left:12px;background:var(--ink);color:var(--paper);font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:999px;letter-spacing:.03em}
+.product-body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:4px;flex:1}
+.product-name{font-family:var(--font-d);font-size:17px;font-weight:700}
+.product-cat{font-size:12.5px;color:var(--muted)}
+.product-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.price{font-weight:700;font-size:16px}
+.price .old{color:var(--muted);text-decoration:line-through;font-weight:600;font-size:13.5px;margin-left:6px}
+.add-btn{background:var(--ink);color:var(--paper);font-size:13.5px;font-weight:700;padding:9px 15px;border-radius:999px;transition:background .15s ease}
+.add-btn:hover{background:var(--pine)}
+.add-btn:active{transform:scale(.97)}
+/* ============ story strip ============ */
+.story{display:grid;grid-template-columns:1fr;gap:28px;align-items:center}
+.story-media{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:16/10}
+.story-media img{width:100%;height:100%;object-fit:cover}
+.story-copy h2{font-size:clamp(24px,4vw,34px);font-weight:700;margin-bottom:12px}
+.story-copy p{color:var(--muted);margin-bottom:10px}
+.story-copy .btn{margin-top:8px}
+/* ============ social strip ============ */
+.social-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:6px}
+.social-card{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;transition:transform .15s ease,box-shadow .15s ease}
+.social-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.social-card svg{width:30px;height:30px;flex:none;color:var(--ink)}
+.social-card h3{font-size:15.5px;font-weight:700}
+.social-card p{font-size:13px;color:var(--muted)}
+.social-card .go{margin-left:auto;color:var(--accent-deep);font-weight:700}
+/* video placeholders */
+.video-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:22px}
+.video-card{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:9/16;cursor:pointer;background:var(--ink)}
+.video-card img{width:100%;height:100%;object-fit:cover;opacity:.85;transition:opacity .2s ease}
+.video-card:hover img{opacity:.65}
+.video-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.video-play span{width:58px;height:58px;border-radius:50%;background:rgba(246,241,231,.92);display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.video-time{position:absolute;right:10px;bottom:10px;background:rgba(23,35,29,.8);color:var(--paper);font-size:11.5px;font-weight:600;padding:3px 8px;border-radius:6px}
+.video-card .cap{position:absolute;left:12px;bottom:12px;right:12px;color:var(--white);font-size:13px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+/* ============ newsletter ============ */
+.news{background:var(--ink);color:var(--paper);border-radius:var(--radius);padding:34px 24px;text-align:center}
+.news h2{font-size:clamp(22px,4vw,30px);font-weight:700;color:var(--white);margin-bottom:8px}
+.news p{color:#C9CDBD;font-size:14.5px;margin-bottom:20px}
+.news-form{display:flex;flex-direction:column;gap:10px;max-width:440px;margin:0 auto}
+.news-form input{flex:1;border:1.5px solid #3C5140;background:#1E2C24;color:var(--paper);border-radius:999px;padding:13px 18px;font-size:16px;outline:none;min-width:0}
+.news-form input::placeholder{color:#8D9584}
+.news-form input:focus{border-color:var(--accent)}
+/* ============ product detail ============ */
+.pd{display:grid;grid-template-columns:1fr;gap:26px;align-items:start}
+.pd-media{border-radius:var(--radius);overflow:hidden;background:var(--card);border:1px solid var(--line)}
+.pd-media img{width:100%;height:auto;object-fit:cover}
+.pd-info .pd-name{font-size:clamp(26px,4.6vw,36px);font-weight:800;margin:6px 0 8px}
+.pd-price{font-size:22px;font-weight:700;margin-bottom:14px}
+.pd-desc{color:var(--muted);margin-bottom:20px}
+.specs{list-style:none;border-top:1px solid var(--line);margin:18px 0}
+.specs li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.specs li span{color:var(--muted)}
+.qty-row{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.qty{display:inline-flex;align-items:center;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
+.qty button{width:42px;height:44px;font-size:18px;font-weight:700;color:var(--ink)}
+.qty button:hover{background:rgba(23,35,29,.06)}
+.qty .qty-num{min-width:46px;text-align:center;font-weight:700}
+.pd-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pd-meta{font-size:13px;color:var(--muted);margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+.pd-meta span{display:inline-flex;align-items:center;gap:5px}
+/* ============ cart / checkout ============ */
+.cart-list{display:flex;flex-direction:column;gap:14px}
+.cart-item{display:grid;grid-template-columns:76px 1fr auto;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px}
+.cart-item img{width:76px;height:76px;object-fit:cover;border-radius:10px}
+.cart-item .ci-name{font-weight:700;font-size:15px}
+.cart-item .ci-price{font-size:13px;color:var(--muted)}
+.cart-item .ci-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.ci-line{font-weight:700;font-size:15px}
+.ci-remove{font-size:12.5px;color:var(--danger);font-weight:600}
+.ci-remove:hover{text-decoration:underline}
+.cart-summary{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-top:22px}
+.cart-summary .row{display:flex;justify-content:space-between;padding:7px 0;font-size:14.5px}
+.cart-summary .row.total{border-top:1px solid var(--line);margin-top:8px;padding-top:12px;font-size:17px;font-weight:700}
+.cart-empty{text-align:center;padding:60px 0;color:var(--muted)}
+.cart-empty h3{font-size:22px;color:var(--ink);margin-bottom:8px}
+.checkout-note{background:#F3EDDC;border:1px dashed var(--accent);border-radius:var(--radius);padding:16px 18px;margin-top:18px;font-size:14px;color:#4C4528}
+.checkout-note h4{font-family:var(--font-d);font-size:15.5px;margin-bottom:6px}
+.checkout-note ol{margin-left:18px;display:flex;flex-direction:column;gap:4px}
+/* ============ about ============ */
+.about-lead{max-width:66ch}
+.about-lead p{color:var(--muted);margin-bottom:14px}
+.value-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:8px}
+.value-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.value-card h3{font-size:16.5px;margin-bottom:6px}
+.value-card p{font-size:14px;color:var(--muted)}
+/* ============ toast ============ */
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--paper);padding:13px 20px;border-radius:999px;font-size:14px;font-weight:600;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:99;max-width:min(92vw,520px);text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* ============ footer ============ */
+footer{background:var(--ink);color:#C9CDBD;margin-top:64px;padding:44px 0 26px}
+.footer-grid{display:grid;grid-template-columns:1fr;gap:26px}
+.footer-brand{color:var(--white);font-family:var(--font-d);font-weight:800;font-size:18px;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.footer-brand svg{width:26px;height:26px}
+.footer-grid h4{color:var(--white);font-size:13px;letter-spacing:.06em;margin-bottom:10px}
+.footer-grid a{display:block;font-size:14px;padding:3px 0;color:#C9CDBD}
+.footer-grid a:hover{color:var(--white)}
+.footer-bottom{border-top:1px solid #2C3B2F;margin-top:30px;padding-top:18px;font-size:12.5px;color:#8D9584;display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between}
+/* ============ views ============ */
+.view{display:none}
+.view.active{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* ============ desktop ============ */
+@media (min-width:640px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .trust-inner{grid-template-columns:repeat(3,1fr)}
+  .social-grid{grid-template-columns:repeat(3,1fr)}
+  .video-grid{grid-template-columns:repeat(3,1fr)}
+  .news-form{flex-direction:row}
+  .news-form .btn{flex:none}
+  .value-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (min-width:1024px){
+  .grid{grid-template-columns:repeat(4,1fr)}
+  .story{grid-template-columns:1.05fr 1fr}
+  .pd{grid-template-columns:1.05fr 1fr}
+  .footer-grid{grid-template-columns:1.6fr 1fr 1fr 1fr}
+  .section{padding:76px 0}
+  .cart-wrap{display:grid;grid-template-columns:1fr 340px;gap:26px;align-items:start}
+  .cart-summary{margin-top:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== nav ===== -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="#home" data-link="home">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#17231D"/><circle cx="32" cy="32" r="15" fill="none" stroke="#B98A3D" stroke-width="5"/><circle cx="32" cy="32" r="4" fill="#B98A3D"/></svg>
+      <span id="brandName">STARMINER</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#shop" data-link="shop">Shop</a>
+      <a href="#about" data-link="about">About</a>
+      <a href="#cart" data-link="cart">Cart <span class="cart-badge zero" id="cartBadge">0</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ===== VIEW: home ===== -->
+<section class="view active" id="view-home">
+  <div class="hero">
+    <div class="container hero-flex">
+      <div class="hero-content">
+        <p class="eyebrow">Starminer · Shenzhen, China</p>
+        <h1>Quiet home Bitcoin mining, built to be lived with.</h1>
+        <p id="heroText">Low-power, fan-quiet solo miners that sit on your desk at 17–120 W. Open-source firmware, Wi-Fi control, and real blocks — shipped worldwide from Shenzhen.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#shop" data-link="shop">Shop the miners</a>
+          <a class="btn btn-light" href="#about" data-link="about">Our story</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <img src="assets/product-601.jpg" alt="Bitaxe Gamma 601 bitcoin miner">
+        <div class="hero-card-cap"><b>Bitaxe Gamma 601</b><span>1.2 TH/s · 17 W · 25–30 dB</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust">
+    <div class="container trust-inner">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5.5v5.6c0 4.9 3.4 9.4 8 10.9 4.6-1.5 8-6 8-10.9V5.5L12 2z"/><path d="m9 12 2 2 4-4"/></svg>
+        <div><h3>Quiet &amp; cool</h3><p>17–120 W with a small fan — fits a desk, not a server room.</p></div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <div><h3>Open-source AXE OS</h3><p>Flash it, tweak it, build on it — the firmware is fully open.</p></div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6M5 6l6 6-6 6"/></svg>
+        <div><h3>Ships worldwide</h3><p>From Shenzhen to your door, with tracking on every order.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <p class="eyebrow">The collection</p>
+      <h2 class="section-title" id="homeShopTitle">Featured miners</h2>
+      <p class="section-sub">Two models we run every day. Solo mining, low power, shipped worldwide.</p>
+      <div class="grid" id="homeGrid"></div>
+      <div style="text-align:center;margin-top:34px"><a class="btn btn-dark" href="#shop" data-link="shop">View all products</a></div>
+    </div>
+  </div>
+
+  <div class="section" style="padding-top:0">
+    <div class="container story">
+      <div class="story-media">
+        <img src="assets/story-601-guide.png" alt="Bitaxe Gamma 601 component guide">
+      </div>
+      <div class="story-copy">
+        <p class="eyebrow">The brand</p>
+        <h2>Designed in Shenzhen, trusted on desks worldwide.</h2>
+        <p id="storyText">[Your story placeholder — replace with your own introduction. This template reads:] STARMINER builds home Bitcoin miners in Shenzhen. Every unit is bench-tested before it ships, runs open-source AXE OS, and is monitored from your phone with the Starminer App — hashrate, temperature and power at a glance, anywhere.</p>
+        <p>Our miners are built for the home, not the server room: quiet fans, global-voltage power, and an OLED screen that shows your hashrate while it hunts for blocks. If a unit ever fails, we redesign it rather than argue with it.</p>
+        <a class="btn btn-ghost" href="#about" data-link="about">Read the full story</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="padding-top:0">
+    <div class="container">
+      <p class="eyebrow">Follow along</p>
+      <h2 class="section-title">On social</h2>
+      <p class="section-sub">Product drops, workshop notes and honest teardowns. [Replace the handles and links with your real accounts.]</p>
+      <div class="social-grid" id="socialGrid"></div>
+      <div class="video-grid" id="videoGrid"></div>
+    </div>
+  </div>
+
+  <div class="section" style="padding-top:0">
+    <div class="container">
+      <div class="news">
+        <h2>New drops, first.</h2>
+        <p>Short email, no noise. New products and restocks only.</p>
+        <form class="news-form" id="newsForm">
+          <input type="email" id="newsEmail" placeholder="you@example.com" aria-label="Email address" required>
+          <button class="btn btn-primary" type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VIEW: shop ===== -->
+<section class="view" id="view-shop">
+  <div class="section">
+    <div class="container">
+      <p class="eyebrow">All products</p>
+      <h2 class="section-title">Shop miners</h2>
+      <p class="section-sub">Every unit ships from Shenzhen with tracking. Global-voltage power adapter included.</p>
+      <div class="grid" id="shopGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VIEW: product detail ===== -->
+<section class="view" id="view-product">
+  <div class="section">
+    <div class="container pd" id="productDetail"></div>
+  </div>
+</section>
+
+<!-- ===== VIEW: cart ===== -->
+<section class="view" id="view-cart">
+  <div class="section">
+    <div class="container">
+      <p class="eyebrow">Your bag</p>
+      <h2 class="section-title">Cart</h2>
+      <div class="cart-wrap">
+        <div id="cartList"></div>
+        <div id="cartSummary"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VIEW: checkout ===== -->
+<section class="view" id="view-checkout">
+  <div class="section">
+    <div class="container">
+      <p class="eyebrow">Checkout</p>
+      <h2 class="section-title">Almost there</h2>
+      <div id="checkoutBody"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VIEW: about ===== -->
+<section class="view" id="view-about">
+  <div class="section">
+    <div class="container about-lead">
+      <p class="eyebrow">The maker</p>
+      <h2 class="section-title">[Your name — placeholder]</h2>
+      <p id="aboutText">[This is a placeholder story. Replace it with your real background, experience and why you started selling.] This template reads: STARMINER started in Shenzhen with a simple idea — home Bitcoin mining shouldn't mean industrial noise, big electric bills or closed hardware. Every unit we ship is bench-tested, runs open-source firmware, and is backed by a 6-month warranty.</p>
+      <p>We test every batch ourselves and answer every email personally. When you buy from this site, you deal with the people who build the product.</p>
+      <p style="font-weight:600;color:var(--ink)">Questions? Write to <a href="mailto:sale@ustarminer.com" style="text-decoration:underline">sale@ustarminer.com</a></p>
+    </div>
+    <div class="container" style="margin-top:36px">
+      <p class="eyebrow">Why we do this</p>
+      <h2 class="section-title">What we believe</h2>
+      <div class="value-grid">
+        <div class="value-card"><h3>Open-source first</h3><p>AXE OS firmware is free and hackable — your miner belongs to you.</p></div>
+        <div class="value-card"><h3>Every unit tested</h3><p>Bench-tested and configured before it leaves Shenzhen.</p></div>
+        <div class="value-card"><h3>Direct from maker</h3><p>No middlemen — you talk to the workshop that built your order.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===== footer ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#27402F"/><circle cx="32" cy="32" r="15" fill="none" stroke="#B98A3D" stroke-width="5"/><circle cx="32" cy="32" r="4" fill="#B98A3D"/></svg>
+          <span>STARMINER</span>
+        </div>
+        <p style="font-size:14px;max-width:34ch">Independent maker of home Bitcoin miners. Shenzhen, China — shipping worldwide.</p>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <a href="#shop" data-link="shop">All products</a>
+        <a href="#cart" data-link="cart">Cart</a>
+        <a href="#about" data-link="about">About</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="mailto:sale@ustarminer.com">sale@ustarminer.com</a>
+        <a href="#about" data-link="about">Shenzhen, China</a>
+      </div>
+      <div>
+        <h4>Social</h4>
+        <a href="https://wa.me/8619575548819" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:sale@ustarminer.com">Email</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> STARMINER. All rights reserved.</span>
+      <span>Demo site — all products, prices and accounts are placeholders.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Static asset declarations: keeps every product image visible to the publish pipeline (paths must appear in a src attribute or CSS url()). -->
+<div hidden aria-hidden="true">
+  <img src="assets/product-601.jpg" alt="" loading="lazy">
+  <img src="assets/product-nerdqaxe.png" alt="" loading="lazy">
+  <img src="assets/story-601-guide.png" alt="" loading="lazy">
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ============================================================
+   CONFIG — edit everything in this block to make the site yours
+   ============================================================ */
+var CONFIG = {
+  brand: "STARMINER",
+  tagline: "Quiet home Bitcoin miners, made in Shenzhen.",
+  email: "sale@ustarminer.com",
+  location: "Shenzhen, China",
+  currency: "USD",
+  freeShippingOver: 80,
+  flatShipping: 6,
+  shippingNote: "Ships worldwide from Shenzhen · Tracking on every order",
+  social: [
+    { name: "WhatsApp", handle: "+86 195 7554 8819", url: "https://wa.me/8619575548819", note: "Fastest replies" }
+    /* Add your real accounts when ready:
+    , { name: "Instagram", handle: "@starminer", url: "https://instagram.com/", note: "Drops & setup notes" }
+    , { name: "TikTok", handle: "@starminer", url: "https://tiktok.com/", note: "Behind the bench" }
+    , { name: "YouTube", handle: "Starminer", url: "https://youtube.com/", note: "Mining guides & teardowns" }
+    */
+  ],
+  videos: [
+    { src: "assets/product-601.jpg", time: "02:10", cap: "Bitaxe Gamma 601 — setup & mine" },
+    { src: "assets/product-nerdqaxe.png", time: "03:00", cap: "NerdQaxe++ Rev6.1 — operation guide" },
+    { src: "assets/product-601.jpg", time: "00:45", cap: "Gamma 601 — found a block" }
+  ],
+  /* Payment placeholders: create Stripe Payment Links (or PayPal buttons)
+     and paste the URLs here. Until then the demo shows setup instructions. */
+  payment: {
+    stripeUrl: "",   /* e.g. https://buy.stripe.com/xxxxxxxx */
+    paypalUrl: ""    /* e.g. https://www.paypal.com/paypalme/yourname */
+  }
+};
+
+/* ============================================================
+   PRODUCTS — replace with your real products
+   ============================================================ */
+var PRODUCTS = [
+  {
+    id: "gamma601",
+    name: "Bitaxe Gamma 601",
+    cat: "Solo Miner",
+    price: 119,
+    oldPrice: null,
+    badge: "Best seller",
+    img: "assets/product-601.jpg",
+    desc: "A quiet, desktop-size Bitcoin solo miner. 1.2 TH/s at just 17 W — about the draw of a phone charger — with Wi-Fi control, a 0.91-inch OLED screen and open-source AXE OS firmware. Set it on your desk, connect to your pool, and chase blocks while you work.",
+    specs: [
+      ["Hashrate", "1.2 TH/s"],
+      ["Power consumption", "17 W"],
+      ["Efficiency", "15 J/TH"],
+      ["ASIC chip", "BM1370"],
+      ["Connectivity", "Wi-Fi 2.4 GHz"],
+      ["Cooling", "5 V 40 mm fan"],
+      ["Display", "0.91-inch OLED"],
+      ["Noise level", "25–30 dB"],
+      ["Power input", "USB-C / standard adapter, global voltage"],
+      ["Operating temp", "5–45 °C"],
+      ["Algorithm", "SHA-256"],
+      ["Firmware", "Open-source AXE OS"],
+      ["Warranty", "6 months"],
+      ["Dimensions", "3.15 × 2.36 × 4.72 in"],
+      ["Weight", "500 g"]
+    ]
+  },
+  {
+    id: "nerdqaxe6t",
+    name: "NerdQaxe++ Rev6.1",
+    cat: "Solo Miner",
+    price: 549,
+    oldPrice: null,
+    badge: "6 TH/s",
+    img: "assets/product-nerdqaxe.png",
+    desc: "The sixfold step up. NerdQaxe++ Rev6.1 delivers 6 TH/s at 120 W with a 1.91-inch OLED screen, Wi-Fi plus USB-C data, and the same open-source AXE OS. Built for miners who want serious hashrate in a home-friendly footprint — air-cooled at 30–35 dB, shipped with a 12 V 10 A adapter and five regional plugs.",
+    specs: [
+      ["Hashrate", "6 TH/s"],
+      ["Power consumption", "120 W"],
+      ["Efficiency", "20.57 J/TH"],
+      ["ASIC chip", "BM1370"],
+      ["Connectivity", "Wi-Fi 2.4 GHz + USB-C data"],
+      ["Cooling", "5 V 40 mm fan"],
+      ["Display", "1.91-inch OLED"],
+      ["Noise level", "30–35 dB"],
+      ["Power input", "Standard adapter, global voltage"],
+      ["Operating temp", "5–45 °C"],
+      ["Algorithm", "SHA-256"],
+      ["Firmware", "Open-source AXE OS"],
+      ["Warranty", "6 months"],
+      ["Dimensions", "6.30 × 4.10 × 6.70 in"],
+      ["Weight", "600 g"]
+    ]
+  }
+];
+
+/* ============================================================
+   App state & helpers
+   ============================================================ */
+var CART_KEY = "pb_cart_v1";
+var cart = loadCart();
+
+function loadCart() {
+  try {
+    var raw = localStorage.getItem(CART_KEY);
+    if (!raw) return {};
+    var obj = JSON.parse(raw);
+    return (obj && typeof obj === "object") ? obj : {};
+  } catch (e) { return {}; }
+}
+function saveCart() {
+  try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {}
+}
+function $id(id) { return document.getElementById(id); }
+function money(n) { return "$" + n.toFixed(2); }
+function esc(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function toast(msg) {
+  var t = $id("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function () { t.classList.remove("show"); }, 2800);
+}
+function byId(id) {
+  for (var i = 0; i < PRODUCTS.length; i++) if (PRODUCTS[i].id === id) return PRODUCTS[i];
+  return null;
+}
+function cartCount() {
+  var n = 0;
+  for (var k in cart) if (Object.prototype.hasOwnProperty.call(cart, k)) n += cart[k];
+  return n;
+}
+function cartTotal() {
+  var t = 0;
+  for (var k in cart) {
+    if (Object.prototype.hasOwnProperty.call(cart, k)) {
+      var p = byId(k);
+      if (p) t += p.price * cart[k];
+    }
+  }
+  return t;
+}
+
+/* ============================================================
+   Icons (inline SVG)
+   ============================================================ */
+var ICONS = {
+  instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>',
+  tiktok: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.4 2.2 1.8 3.6 3.9 3.9v3c-1.4 0-2.7-.4-3.9-1.2v6.4c0 3.6-2.7 6.2-6.1 6.2-3.1 0-5.4-2.4-5.4-5.3 0-3.2 2.9-5.8 6.3-5.3v3.1c-1.5-.4-3 .5-3 2.1 0 1.2 1 2.2 2.2 2.2 1.4 0 2.5-1 2.5-2.5V3h3.4z"/></svg>',
+  youtube: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.5l4.5 2.5-4.5 2.5z" fill="currentColor" stroke="none"/></svg>',
+  play: '<span aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></span>',
+  arrow: '<span class="go" aria-hidden="true">→</span>'
+};
+
+/* ============================================================
+   Renderers
+   ============================================================ */
+function productCard(p) {
+  var badge = p.badge ? '<span class="product-badge">' + esc(p.badge) + '</span>' : "";
+  var old = p.oldPrice ? '<span class="old">' + money(p.oldPrice) + '</span>' : "";
+  return '<article class="product-card" data-goto="product-' + p.id + '">' +
+    '<div class="product-media">' + badge +
+      '<img src="' + p.img + '" alt="' + esc(p.name) + '" loading="lazy">' +
+    '</div>' +
+    '<div class="product-body">' +
+      '<span class="product-cat">' + esc(p.cat) + '</span>' +
+      '<h3 class="product-name">' + esc(p.name) + '</h3>' +
+      '<div class="product-foot">' +
+        '<span class="price">' + money(p.price) + old + '</span>' +
+        '<button class="add-btn" data-add="' + p.id + '">Add to bag</button>' +
+      '</div>' +
+    '</div>' +
+  '</article>';
+}
+
+function renderProductGrids() {
+  var home = PRODUCTS.slice(0, 4).map(productCard).join("");
+  var shop = PRODUCTS.map(productCard).join("");
+  $id("homeGrid").innerHTML = home;
+  $id("shopGrid").innerHTML = shop;
+}
+
+function renderSocial() {
+  $id("socialGrid").innerHTML = CONFIG.social.map(function (s) {
+    return '<a class="social-card" href="' + s.url + '" target="_blank" rel="noopener">' +
+      ICONS[s.name.toLowerCase()] +
+      '<div><h3>' + esc(s.name) + '</h3><p>' + esc(s.handle) + ' — ' + esc(s.note) + '</p></div>' +
+      '<span class="go">→</span>' +
+    '</a>';
+  }).join("");
+  $id("videoGrid").innerHTML = CONFIG.videos.map(function (v, i) {
+    return '<div class="video-card" data-video="' + i + '" role="button" tabindex="0" aria-label="Play video: ' + esc(v.cap) + '">' +
+      '<img src="' + v.src + '" alt="' + esc(v.cap) + '" loading="lazy">' +
+      '<div class="video-play">' + ICONS.play + '</div>' +
+      '<span class="video-time">' + v.time + '</span>' +
+      '<span class="cap">' + esc(v.cap) + '</span>' +
+    '</div>';
+  }).join("");
+  document.querySelectorAll("[data-video]").forEach(function (el) {
+    var say = function () { toast("Connect your " + CONFIG.social[1].name + " / YouTube account to show videos here."); };
+    el.addEventListener("click", say);
+    el.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); say(); }
+    });
+  });
+}
+
+function renderProductDetail(id) {
+  var p = byId(id);
+  var box = $id("productDetail");
+  if (!p) { box.innerHTML = '<p style="color:var(--muted)">Product not found.</p>'; return; }
+  var old = p.oldPrice ? '<span class="old">' + money(p.oldPrice) + '</span>' : "";
+  box.innerHTML =
+    '<div class="pd-media"><img src="' + p.img + '" alt="' + esc(p.name) + '"></div>' +
+    '<div class="pd-info">' +
+      '<a href="#shop" data-link="shop" style="font-size:13.5px;font-weight:600;color:var(--accent-deep)">← Back to shop</a>' +
+      '<h1 class="pd-name">' + esc(p.name) + '</h1>' +
+      '<div class="pd-price">' + money(p.price) + old + '</div>' +
+      '<p class="pd-desc">' + esc(p.desc) + '</p>' +
+      '<ul class="specs">' + p.specs.map(function (s) {
+        return '<li><span>' + esc(s[0]) + '</span><b>' + esc(s[1]) + '</b></li>';
+      }).join("") + '</ul>' +
+      '<div class="qty-row"><span style="font-size:14px;color:var(--muted)">Qty</span>' +
+        '<div class="qty"><button data-qty="' + p.id + '" data-delta="-1" aria-label="Decrease quantity">−</button>' +
+        '<span class="qty-num" id="qty-' + p.id + '">1</span>' +
+        '<button data-qty="' + p.id + '" data-delta="1" aria-label="Increase quantity">+</button></div>' +
+      '</div>' +
+      '<div class="pd-cta">' +
+        '<button class="btn btn-primary" data-addqty="' + p.id + '">Add to bag</button>' +
+        '<button class="btn btn-ghost" data-buy="' + p.id + '">Buy now</button>' +
+      '</div>' +
+      '<div class="pd-meta">' +
+        '<span>Free shipping over ' + money(CONFIG.freeShippingOver) + '</span>' +
+        '<span>·</span><span>' + esc(CONFIG.shippingNote) + '</span>' +
+      '</div>' +
+    '</div>';
+  $id("qty-" + p.id).textContent = 1;
+}
+
+function renderCart() {
+  var listBox = $id("cartList");
+  var sumBox = $id("cartSummary");
+  var ids = Object.keys(cart).filter(function (k) { return cart[k] > 0; });
+  if (ids.length === 0) {
+    listBox.innerHTML =
+      '<div class="cart-empty"><h3>Your bag is empty</h3><p>Good things are worth waiting for.</p>' +
+      '<a class="btn btn-dark" href="#shop" data-link="shop" style="margin-top:18px">Browse the miners</a></div>';
+    sumBox.innerHTML = "";
+    return;
+  }
+  listBox.innerHTML = ids.map(function (k) {
+    var p = byId(k);
+    var row = money(p.price * cart[k]);
+    return '<div class="cart-item">' +
+      '<img src="' + p.img + '" alt="' + esc(p.name) + '">' +
+      '<div><div class="ci-name">' + esc(p.name) + '</div><div class="ci-price">' + money(p.price) + ' each</div>' +
+        '<div class="qty" style="margin-top:8px">' +
+          '<button data-qty="' + p.id + '" data-delta="-1" aria-label="Decrease quantity">−</button>' +
+          '<span class="qty-num">' + cart[k] + '</span>' +
+          '<button data-qty="' + p.id + '" data-delta="1" aria-label="Increase quantity">+</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="ci-side"><span class="ci-line">' + row + '</span>' +
+        '<button class="ci-remove" data-remove="' + p.id + '">Remove</button></div>' +
+    '</div>';
+  }).join("");
+  var sub = cartTotal();
+  var ship = sub >= CONFIG.freeShippingOver || sub === 0 ? 0 : CONFIG.flatShipping;
+  sumBox.innerHTML =
+    '<div class="cart-summary">' +
+      '<h3 style="font-size:18px;margin-bottom:10px">Summary</h3>' +
+      '<div class="row"><span>Subtotal</span><span>' + money(sub) + '</span></div>' +
+      '<div class="row"><span>Shipping</span><span>' + (ship === 0 ? "Free" : money(ship)) + '</span></div>' +
+      '<div class="row total"><span>Total</span><span>' + money(sub + ship) + '</span></div>' +
+      '<button class="btn btn-primary" data-checkout style="width:100%;margin-top:14px">Continue to checkout</button>' +
+      '<p style="font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center">' + esc(CONFIG.shippingNote) + '</p>' +
+    '</div>';
+}
+
+function renderCheckout() {
+  var body = $id("checkoutBody");
+  var ids = Object.keys(cart).filter(function (k) { return cart[k] > 0; });
+  if (ids.length === 0) {
+    body.innerHTML =
+      '<div class="cart-empty"><h3>Nothing to check out</h3><p>Your bag is empty.</p>' +
+      '<a class="btn btn-dark" href="#shop" data-link="shop" style="margin-top:18px">Back to shop</a></div>';
+    return;
+  }
+  var rows = ids.map(function (k) {
+    var p = byId(k);
+    return '<div class="row"><span>' + esc(p.name) + ' × ' + cart[k] + '</span><span>' + money(p.price * cart[k]) + '</span></div>';
+  }).join("");
+  var sub = cartTotal();
+  var ship = sub >= CONFIG.freeShippingOver ? 0 : CONFIG.flatShipping;
+  var stripeUrl = CONFIG.payment.stripeUrl;
+  var paypalUrl = CONFIG.payment.paypalUrl;
+  body.innerHTML =
+    '<div class="cart-summary" style="max-width:520px">' +
+      '<h3 style="font-size:18px;margin-bottom:10px">Order summary</h3>' + rows +
+      '<div class="row"><span>Shipping</span><span>' + (ship === 0 ? "Free" : money(ship)) + '</span></div>' +
+      '<div class="row total"><span>Total</span><span>' + money(sub + ship) + '</span></div>' +
+      '<div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">' +
+        '<button class="btn btn-primary" id="payStripe" style="width:100%">Pay with Stripe</button>' +
+        '<button class="btn btn-dark" id="payPaypal" style="width:100%">Pay with PayPal</button>' +
+      '</div>' +
+      '<p style="font-size:12.5px;color:var(--muted);margin-top:12px;text-align:center">Demo checkout — no money is charged until you connect a payment provider.</p>' +
+    '</div>' +
+    '<div class="checkout-note" style="max-width:520px">' +
+      '<h4>How to go live (2 steps)</h4>' +
+      '<ol>' +
+        '<li>Create a free account at stripe.com and make a <b>Payment Link</b> for each product (or use PayPal business).</li>' +
+        '<li>Paste the links into the <code>payment</code> block near the top of the HTML (CONFIG.payment). Checkout buttons then redirect there automatically.</li>' +
+      '</ol>' +
+    '</div>';
+  var pay = $id("payStripe");
+  var payp = $id("payPaypal");
+  pay.onclick = function () {
+    if (stripeUrl) { window.open(stripeUrl, "_blank"); }
+    else toast("Stripe not connected yet — paste your Payment Link into CONFIG.payment.stripeUrl.");
+  };
+  payp.onclick = function () {
+    if (paypalUrl) { window.open(paypalUrl, "_blank"); }
+    else toast("PayPal not connected yet — paste your link into CONFIG.payment.paypalUrl.");
+  };
+}
+
+/* ============================================================
+   Router
+   ============================================================ */
+function parseHash() {
+  var h = location.hash.replace(/^#/, "") || "home";
+  if (h.indexOf("product-") === 0) return { view: "product", id: h.slice(8) };
+  return { view: h, id: null };
+}
+function renderRoute() {
+  var r = parseHash();
+  var map = { home: "view-home", shop: "view-shop", product: "view-product",
+              cart: "view-cart", checkout: "view-checkout", about: "view-about" };
+  var target = map[r.view] || "view-home";
+  var sections = document.querySelectorAll(".view");
+  for (var i = 0; i < sections.length; i++) {
+    sections[i].classList.toggle("active", sections[i].id === target);
+  }
+  if (r.view === "product") renderProductDetail(r.id);
+  if (r.view === "cart") renderCart();
+  if (r.view === "checkout") renderCheckout();
+  /* active nav */
+  var links = document.querySelectorAll(".nav-links a");
+  for (var j = 0; j < links.length; j++) {
+    links[j].classList.toggle("active", links[j].getAttribute("data-link") === r.view);
+  }
+  window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+/* ============================================================
+   Cart actions
+   ============================================================ */
+function addToCart(id, qty) {
+  var p = byId(id);
+  if (!p) return;
+  qty = qty || 1;
+  cart[id] = (cart[id] || 0) + qty;
+  saveCart();
+  updateBadge();
+  toast(esc(p.name) + " added to your bag");
+}
+function updateBadge() {
+  var n = cartCount();
+  var b = $id("cartBadge");
+  b.textContent = n;
+  b.classList.toggle("zero", n === 0);
+}
+
+/* ============================================================
+   Global click handling
+   ============================================================ */
+document.addEventListener("click", function (e) {
+  var t = e.target;
+  /* card → product detail */
+  var card = t.closest("[data-goto]");
+  if (card) { location.hash = "#" + card.getAttribute("data-goto"); return; }
+  /* add from card */
+  var add = t.closest("[data-add]");
+  if (add) { addToCart(add.getAttribute("data-add"), 1); return; }
+  /* qty stepper (detail + cart) */
+  var q = t.closest("[data-qty]");
+  if (q) {
+    var pid = q.getAttribute("data-qty");
+    var delta = parseInt(q.getAttribute("data-delta"), 10);
+    var detailQty = $id("qty-" + pid);
+    if (detailQty) {
+      var n = parseInt(detailQty.textContent, 10) + delta;
+      if (n < 1) n = 1;
+      detailQty.textContent = n;
+    } else if (cart[pid]) {
+      cart[pid] += delta;
+      if (cart[pid] < 1) cart[pid] = 1;
+      saveCart();
+      updateBadge();
+      renderCart();
+    }
+    return;
+  }
+  /* add with qty (detail) */
+  var aq = t.closest("[data-addqty]");
+  if (aq) {
+    var ap = aq.getAttribute("data-addqty");
+    var dq = $id("qty-" + ap);
+    addToCart(ap, dq ? parseInt(dq.textContent, 10) : 1);
+    return;
+  }
+  /* buy now (detail) */
+  var bn = t.closest("[data-buy]");
+  if (bn) {
+    var bp = bn.getAttribute("data-buy");
+    var bq = $id("qty-" + bp);
+    addToCart(bp, bq ? parseInt(bq.textContent, 10) : 1);
+    location.hash = "#checkout";
+    return;
+  }
+  /* remove from cart */
+  var rm = t.closest("[data-remove]");
+  if (rm) {
+    delete cart[rm.getAttribute("data-remove")];
+    saveCart();
+    updateBadge();
+    renderCart();
+    return;
+  }
+  /* continue to checkout */
+  if (t.closest("[data-checkout]")) { location.hash = "#checkout"; return; }
+});
+
+/* ============================================================
+   Newsletter (demo)
+   ============================================================ */
+$id("newsForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  var em = $id("newsEmail");
+  if (em.value && em.value.indexOf("@") > -1) {
+    toast("Thanks! Subscribed (demo — connect your email tool to receive real signups).");
+    em.value = "";
+  } else {
+    toast("Please enter a valid email address.");
+  }
+});
+
+/* ============================================================
+   Init
+   ============================================================ */
+window.addEventListener("hashchange", renderRoute);
+document.querySelectorAll("[data-link]").forEach(function (a) {
+  a.addEventListener("click", function () { renderRoute(); });
+});
+$id("year").textContent = new Date().getFullYear();
+renderProductGrids();
+renderSocial();
+updateBadge();
+renderRoute();
+</script>
+</body>
+</html>
