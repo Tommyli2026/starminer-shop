@@ -454,11 +454,16 @@ var CONFIG = {
     { src: "assets/product-nerdqaxe.png", time: "03:00", cap: "NerdQaxe++ Rev6.1 — operation guide" },
     { src: "assets/product-601.jpg", time: "00:45", cap: "Gamma 601 — found a block" }
   ],
-  /* Payment placeholders: create Stripe Payment Links (or PayPal buttons)
-     and paste the URLs here. Until then the demo shows setup instructions. */
+  /* Payment: PayPal Payment Links per product.
+     Single-item orders jump to the matching link; multi-item orders are guided to WhatsApp.
+     To add Stripe later, paste a Payment Link into stripeUrl. */
   payment: {
-    stripeUrl: "",   /* e.g. https://buy.stripe.com/xxxxxxxx */
-    paypalUrl: ""    /* e.g. https://www.paypal.com/paypalme/yourname */
+    stripeUrl: "",
+    paypalLinks: {
+      gamma601: "https://www.paypal.com/ncp/payment/DNVPFTRLZPJT8",   /* Bitaxe Gamma 601 — $119 */
+      nerdqaxe6t: "https://www.paypal.com/ncp/payment/GPVQLW6VFT3TS"   /* NerdQaxe++ Rev6.1 — $549 */
+    },
+    whatsappUrl: "https://wa.me/8619575548819"
   }
 };
 
@@ -722,36 +727,34 @@ function renderCheckout() {
   }).join("");
   var sub = cartTotal();
   var ship = sub >= CONFIG.freeShippingOver ? 0 : CONFIG.flatShipping;
-  var stripeUrl = CONFIG.payment.stripeUrl;
-  var paypalUrl = CONFIG.payment.paypalUrl;
+  var singleItem = ids.length === 1 && cart[ids[0]] === 1;
+  var payKey = singleItem ? ids[0] : null;
+  var payUrl = payKey && CONFIG.payment.paypalLinks ? (CONFIG.payment.paypalLinks[payKey] || "") : "";
+  var payProduct = payKey ? byId(payKey) : null;
+  var payBtn = payUrl
+    ? '<button class="btn btn-primary" id="payPaypal" style="width:100%">Pay with PayPal — ' + money(sub + ship) + '</button>' +
+      '<p style="font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center">You will be redirected to PayPal to pay securely. Order: ' + esc(payProduct.name) + '.</p>'
+    : '<div class="checkout-note" style="margin-top:0"><h4>Mixed or multi-item orders</h4><p style="margin:0">This cart contains more than one unit or a mix of products. Message us on WhatsApp for a combined invoice with the correct shipping rate.</p>' +
+      '<a class="btn btn-dark" href="' + CONFIG.payment.whatsappUrl + '" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:12px">Order on WhatsApp</a></div>';
   body.innerHTML =
     '<div class="cart-summary" style="max-width:520px">' +
       '<h3 style="font-size:18px;margin-bottom:10px">Order summary</h3>' + rows +
       '<div class="row"><span>Shipping</span><span>' + (ship === 0 ? "Free" : money(ship)) + '</span></div>' +
       '<div class="row total"><span>Total</span><span>' + money(sub + ship) + '</span></div>' +
-      '<div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">' +
-        '<button class="btn btn-primary" id="payStripe" style="width:100%">Pay with Stripe</button>' +
-        '<button class="btn btn-dark" id="payPaypal" style="width:100%">Pay with PayPal</button>' +
-      '</div>' +
-      '<p style="font-size:12.5px;color:var(--muted);margin-top:12px;text-align:center">Demo checkout — no money is charged until you connect a payment provider.</p>' +
+      '<div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">' + payBtn + '</div>' +
     '</div>' +
     '<div class="checkout-note" style="max-width:520px">' +
-      '<h4>How to go live (2 steps)</h4>' +
+      '<h4>Payment &amp; shipping</h4>' +
       '<ol>' +
-        '<li>Create a free account at stripe.com and make a <b>Payment Link</b> for each product (or use PayPal business).</li>' +
-        '<li>Paste the links into the <code>payment</code> block near the top of the HTML (CONFIG.payment). Checkout buttons then redirect there automatically.</li>' +
+        '<li>Paid securely through PayPal (any major card accepted).</li>' +
+        '<li>Ships worldwide from Shenzhen, China — usually within 1–2 business days.</li>' +
+        '<li>Questions? <a href="mailto:sale@ustarminer.com">sale@ustarminer.com</a> or <a href="' + CONFIG.payment.whatsappUrl + '" target="_blank" rel="noopener">WhatsApp +86 195 7554 8819</a>.</li>' +
       '</ol>' +
     '</div>';
-  var pay = $id("payStripe");
   var payp = $id("payPaypal");
-  pay.onclick = function () {
-    if (stripeUrl) { window.open(stripeUrl, "_blank"); }
-    else toast("Stripe not connected yet — paste your Payment Link into CONFIG.payment.stripeUrl.");
-  };
-  payp.onclick = function () {
-    if (paypalUrl) { window.open(paypalUrl, "_blank"); }
-    else toast("PayPal not connected yet — paste your link into CONFIG.payment.paypalUrl.");
-  };
+  if (payp) {
+    payp.onclick = function () { window.open(payUrl, "_blank", "noopener"); };
+  }
 }
 
 /* ============================================================
